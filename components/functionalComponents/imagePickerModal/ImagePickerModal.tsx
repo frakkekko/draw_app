@@ -37,6 +37,7 @@ const ImagePickerModal: FunctionComponent<ImagePickerModalProps> = (
   const addImgToAlbum =
     (item: string): ((e: GestureResponderEvent) => void) =>
     (e: GestureResponderEvent): void => {
+      setImageFiltered(null);
       props.addImgToAlbum(item);
     };
 

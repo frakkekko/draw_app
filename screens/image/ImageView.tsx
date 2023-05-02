@@ -38,6 +38,7 @@ import { BlurView } from "expo-blur";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store";
 import { updateImage } from "../../redux/foldersDuck/foldersDuck";
+import imageViewStyles from "./imageViewStyles";
 
 type ImageProps = NativeStackScreenProps<RootStackParamList, "ImageView">;
 
@@ -159,22 +160,23 @@ const ImageView: FunctionComponent<ImageProps> = (props: ImageProps) => {
 
   return (
     <View
-      style={{
-        flex: 1,
-        position: "relative",
-        justifyContent: "center",
-        alignItems: "center",
-        paddingTop: insets.top,
-        paddingBottom: insets.bottom,
-      }}
+      style={[
+        imageViewStyles.mainContainer,
+        {
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+        },
+      ]}
     >
       <TouchableWithoutFeedback onPress={toggleInfo}>
         <Image
-          style={{
-            width: Dimensions.get("window").width,
-            height:
-              Dimensions.get("window").height - insets.top - insets.bottom,
-          }}
+          style={[
+            imageViewStyles.image,
+            {
+              height:
+                Dimensions.get("window").height - insets.top - insets.bottom,
+            },
+          ]}
           source={{
             uri:
               FileSystem.documentDirectory +
@@ -187,60 +189,58 @@ const ImageView: FunctionComponent<ImageProps> = (props: ImageProps) => {
       {
         <>
           <Animated.View
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              padding: 20,
-              paddingTop: 10 + insets.top,
-              opacity: fadeAnim,
-            }}
+            style={[
+              imageViewStyles.animatedTopView,
+              {
+                opacity: fadeAnim,
+                paddingTop: 10 + insets.top,
+              },
+            ]}
           >
             <View
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                padding: 20,
-                paddingTop: 10 + insets.top,
-                backgroundColor: "#222",
-              }}
+              style={[
+                imageViewStyles.animatedTopViewWrapper,
+                {
+                  paddingTop: 10 + insets.top,
+                },
+              ]}
             >
-              <Text
-                style={{ fontSize: 20, color: "#fff", textAlign: "center" }}
+              <TouchableOpacity
+                onPress={props.navigation.goBack}
+                style={[
+                  imageViewStyles.goBackButton,
+                  {
+                    top: insets.top + 8,
+                  },
+                ]}
               >
+                <Ionicons
+                  name="chevron-back-outline"
+                  size={34}
+                  color="#0066ff"
+                />
+              </TouchableOpacity>
+              <Text style={imageViewStyles.titleText}>
                 {replace(props.route.params.img.slice(0, -4), /_/g, " ")}
               </Text>
             </View>
           </Animated.View>
           <Animated.View
-            style={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              padding: 20,
-              paddingBottom: 10 + insets.bottom,
-              justifyContent: "center",
-              alignItems: "center",
-              opacity: fadeAnim,
-            }}
+            style={[
+              imageViewStyles.animatedBottomView,
+              {
+                opacity: fadeAnim,
+                paddingBottom: 10 + insets.bottom,
+              },
+            ]}
           >
             <View
-              style={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                right: 0,
-                padding: 20,
-                paddingBottom: 10 + insets.bottom,
-                justifyContent: "space-around",
-                alignItems: "center",
-                flexDirection: "row",
-                backgroundColor: "#222",
-              }}
+              style={[
+                imageViewStyles.buttonsBottomContainer,
+                {
+                  paddingBottom: 10 + insets.bottom,
+                },
+              ]}
             >
               <TouchableOpacity onPress={saveToMediaLibrary}>
                 <Ionicons name="download-outline" size={34} color="#0066ff" />

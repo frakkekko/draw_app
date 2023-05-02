@@ -29,10 +29,9 @@ const Home: FunctionComponent<HomeProps> = (props: HomeProps) => {
   let inputModalRef = useRef<string>("");
 
   useEffect(() => {
-    // clearLocalStorage();
     // readDirTest();
     checkTutorial();
-    // clearStorage();
+    //clearStorage();
   }, []);
 
   const clearStorage = async (): Promise<void> => {

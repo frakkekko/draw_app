@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState, useRef } from "react";
-import { Text, View, TouchableOpacity, Alert, Animated } from "react-native";
+import { Text, View, TouchableOpacity, Alert } from "react-native";
 
 // File System
 import * as FileSystem from "expo-file-system";
@@ -12,11 +12,15 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../App";
 
 // Lodash
-import { cloneDeep, replace } from "lodash";
+import { replace } from "lodash";
 
 // Icons
 import { Ionicons } from "@expo/vector-icons";
+
+// Components
 import InputModal from "../../components/functionalComponents/inputModal/InputModal";
+
+// Gesture Handler
 import {
   Swipeable,
   GestureHandlerRootView,
@@ -24,12 +28,15 @@ import {
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import {
   updateFolder,
   updateImage,
   updateImageByMerge,
 } from "../../redux/foldersDuck/foldersDuck";
-import { AppDispatch, RootState } from "../../redux/store";
+
+// Styles
+import appAssetsStyles from "./appAssetsStyles";
 
 type AppAssetsProps = NativeStackScreenProps<RootStackParamList, "AppAssets">;
 
@@ -41,8 +48,6 @@ const AppAssets: FunctionComponent<AppAssetsProps> = (
   let foldersState: string[] = useSelector(
     (state: RootState) => state.foldersDuck.folders
   );
-
-  let imagesState = useSelector((state: RootState) => state.foldersDuck.images);
 
   let dispatch: AppDispatch = useDispatch();
 
@@ -68,7 +73,6 @@ const AppAssets: FunctionComponent<AppAssetsProps> = (
 
             dispatch(updateImage({}));
             dispatch(updateFolder(dirDataUpdate));
-            // setDirData([...dirDataUpdate]);
           } catch (err) {
             console.log(err);
             Alert.alert(
@@ -220,7 +224,6 @@ const AppAssets: FunctionComponent<AppAssetsProps> = (
       dirDataUpdate.push(text);
 
       dispatch(updateFolder(dirDataUpdate));
-      // setDirData([...dirDataUpdate]);
       setModal(false);
     } catch (err) {
       console.log(err);
@@ -252,33 +255,16 @@ const AppAssets: FunctionComponent<AppAssetsProps> = (
             keyExtractor={extractKey}
           />
         )}
-        <View
-          style={{
-            position: "absolute",
-            justifyContent: "center",
-            alignItems: "center",
-            width: 80,
-            height: 80,
-            bottom: 80,
-            right: 40,
-          }}
-        >
+        <View style={appAssetsStyles.iconWrapper}>
           <TouchableOpacity
-            style={{
-              backgroundColor: "#1e90ff",
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 50,
-              width: 70,
-              height: 70,
-            }}
+            style={appAssetsStyles.iconTouchable}
             onPress={addAlbum}
           >
             <Ionicons
               name="add"
               size={50}
               color="#fff"
-              style={{ justifyContent: "center", alignItems: "center" }}
+              style={appAssetsStyles.icon}
             />
           </TouchableOpacity>
         </View>

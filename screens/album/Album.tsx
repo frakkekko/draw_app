@@ -1,17 +1,9 @@
-import React, {
-  FunctionComponent,
-  MutableRefObject,
-  useEffect,
-  useRef,
-  useState,
-  useTransition,
-} from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
   TextInput,
   Image,
-  Dimensions,
   TouchableOpacity,
   TouchableWithoutFeedback,
   GestureResponderEvent,
@@ -19,9 +11,6 @@ import {
   FlatList,
   Keyboard,
 } from "react-native";
-
-// Flash List
-import { FlashList, ListRenderItem } from "@shopify/flash-list";
 
 // File System
 import * as FileSystem from "expo-file-system";
@@ -44,7 +33,6 @@ import {
   Swipeable,
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
-import ImagePickerModal from "../../components/functionalComponents/imagePickerModal/ImagePickerModal";
 
 // Redux
 import { useSelector, useDispatch } from "react-redux";
@@ -53,6 +41,7 @@ import { updateImage } from "../../redux/foldersDuck/foldersDuck";
 
 // Components
 import SearchBar from "../../components/functionalComponents/searchBar/SearchBar";
+import ImagePickerModal from "../../components/functionalComponents/imagePickerModal/ImagePickerModal";
 
 type AlbumProps = NativeStackScreenProps<RootStackParamList, "Album">;
 
@@ -234,6 +223,10 @@ const Album: FunctionComponent<AlbumProps> = (props: AlbumProps) => {
 
   const addImgToAlbum = async (item: string): Promise<void> => {
     try {
+      setModal(false);
+      setIsActiveFilter(false);
+      inputRef.current?.clear();
+
       console.log(item);
       console.log(imagesState);
 
@@ -252,12 +245,8 @@ const Album: FunctionComponent<AlbumProps> = (props: AlbumProps) => {
       imgsStateUpdate[props.route.params.albumName] = [...imgsUpdate];
 
       dispatch(updateImage(imgsStateUpdate));
-      setIsActiveFilter(false);
-
-      inputRef.current?.clear();
 
       // setImgs([...imgsUpdate]);
-      setModal(false);
     } catch (err) {
       console.log(err);
       Alert.alert(
@@ -286,15 +275,7 @@ const Album: FunctionComponent<AlbumProps> = (props: AlbumProps) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <View
-        style={{
-          height: 80,
-          width: "100%",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#111",
-        }}
-      >
+      <View style={albumStyles.searchBarContainer}>
         <SearchBar onInputChange={updateFilter} inputRef={inputRef} />
       </View>
       <View style={albumStyles.listContainer}>
@@ -312,41 +293,16 @@ const Album: FunctionComponent<AlbumProps> = (props: AlbumProps) => {
         />
       </View>
       {props.route.params.albumName !== "Main_Album" && (
-        <View
-          style={{
-            position: "absolute",
-            justifyContent: "center",
-            alignItems: "center",
-            width: 80,
-            height: 80,
-            bottom: 80,
-            right: 40,
-          }}
-        >
+        <View style={albumStyles.addImageBtnContainer}>
           <TouchableOpacity
-            style={{
-              backgroundColor: "#1e90ff",
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 50,
-              width: 70,
-              height: 70,
-              shadowColor: "#000000",
-              shadowOffset: {
-                width: 0,
-                height: 7,
-              },
-              shadowOpacity: 0.21,
-              shadowRadius: 7.68,
-              elevation: 10,
-            }}
+            style={albumStyles.addImageTouchable}
             onPress={openModal}
           >
             <Ionicons
               name="add"
               size={50}
               color="#fff"
-              style={{ justifyContent: "center", alignItems: "center" }}
+              style={albumStyles.addButtonIcon}
             />
           </TouchableOpacity>
         </View>
